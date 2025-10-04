@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+@font-face {
+    font-family: 'TerminusTTF';
+    src: url('/TerminusTTF-Bold.ttf');
+}
+.font-scaling {
+    @media screen and (max-width: 640px){
+        @apply text-xs;
+    }
+}
