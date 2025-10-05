@@ -1,0 +1,10 @@
+{
+  "backToThefirey33": "Back to Thefirey33",
+  "instruction": "Instruction",
+  "credits": "Credits",
+  "noikDemand": "you must feed the noik.\nthe noik demands pancakes.",
+  "creditsButton": "OneShot is a game by FutureCat LLC.\nMade in React by a ADHD-infused developer.\nthe other parts of the website are made in Svelte, which... (i shouldn't have used Svelte for the other parts... man it was a struggle. D:)",
+  "ok": "aight",
+  "funnyButton": "the funy button",
+  "meowText": "(Niko just made a meow sound.)"
+}

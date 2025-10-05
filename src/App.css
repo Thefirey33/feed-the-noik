@@ -4,8 +4,22 @@
     font-family: 'TerminusTTF';
     src: url('/TerminusTTF-Bold.ttf');
 }
+body {
+    background-image: url("/backgrounds/walpaperpancake.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+    @apply font-[TerminusTTF];
+    background-attachment: fixed;
+    user-select: none;
+}
 .font-scaling {
     @media screen and (max-width: 640px){
         @apply text-xs;
+    }
+}
+.message-box-scaling {
+    @apply transition-all duration-100 min-w-40 min-h-40;
+    @media screen and (max-width: 640px) {
+        @apply min-w-30 min-h-30;
     }
 }
