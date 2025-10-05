@@ -11,10 +11,10 @@ export function UpToolbar(props: {languageData: { [key: string]: string}}) {
             <>
                 <button className="bg-yellow-300 rounded-xl p-2 m-2 min-w-10 hover:scale-120 cursor-pointer transition-all duration-75 focus:bg-yellow-50" onMouseEnter={() =>
                     {
-                        soundSystem.playAudio(soundSystem.selectAudio);
+                        soundSystem.playAudio("cursor");
                     }
                 } onClick={() => {
-                    soundSystem.playAudio(soundSystem.clickAudio);
+                    soundSystem.playAudio("decision");
                     props.onClick?.();
                 }}>
                     <h1 className="text-black font-scaling">{props.children}</h1>
@@ -50,7 +50,7 @@ export function UpToolbar(props: {languageData: { [key: string]: string}}) {
                         }</ToolbarButton>
                         <ToolbarButton onClick={() => {
                             setTimeout(() => {
-                                soundSystem.playAudio(soundSystem.cat_1)
+                                soundSystem.playAudio("cat_1")
                                 setMessageBoxText((props.languageData["meowText"] + "\n").repeat(countOfTimesYouDecidedToMeow.current))
                                 countOfTimesYouDecidedToMeow.current++
                             }, 1000)

@@ -50,7 +50,7 @@ export class AnimatedImageAsset {
     public render(canvasContext: CanvasRenderingContext2D, position: Vector2, deltaTime: number, isAnimating: boolean = true, tilemapAniSpeed: number = 20){
         const currentFrame = Math.floor(this.aniFrame)
         GameEngineFunctions.RenderImage(canvasContext, position, this.imgArray[currentFrame])
-        if (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyD"))
+        if (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyQ"))
         {
             GameEngineFunctions.DrawFont(canvasContext, position, `F${currentFrame}`, "white", 20)
         }

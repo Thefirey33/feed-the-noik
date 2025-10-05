@@ -15,11 +15,11 @@ export function MessageBox(props: {topHeader: string, whenClosed: () => void, la
                     <button
                         className="text-black mt-5 bg-yellow-300 ml-auto mr-auto p-3 w-fit rounded-xl h-fit hover:scale-120 transition-all duration-75 focus:bg-yellow-50 cursor-pointer"
                         onMouseEnter={() => {
-                            soundSystem.playAudio(soundSystem.selectAudio);
+                            soundSystem.playAudio("cursor");
                         }}
                         onClick={() => {
                             // Set Message Box state, back to nothing.
-                            soundSystem.playAudio(soundSystem.cancelAudio);
+                            soundSystem.playAudio("cancel");
                             props.whenClosed()
                         }}>{props.languageData["ok"]}
                     </button>

@@ -1,6 +1,6 @@
 import {AnimatedImageAsset, KeyboardInputHandler, Vector2} from "./GameEngineFunctions.ts";
 
-export const BASE_TILE_SIZE = new Vector2(32, 32)
+export const BASE_TILE_SIZE = new Vector2(64, 64)
 export const ROOM_SIZE = new Vector2(20, 40)
 export class TilemapPiece {
     textureData?: AnimatedImageAsset
@@ -34,23 +34,27 @@ export class TilemapPiece {
         // If the texture data is undefined, do not render the object.
         if (this.textureData === undefined)
             return;
+        const textureSizes = this.getTextureSize()
         // This renders the object if the object is only in range of the canvas.
-        if (position.x >= 0 && position.x <= canvasContext.canvas.width && position.y >= 0 && position.y <= canvasContext.canvas.height)
+        if (position.x >= -textureSizes.x && position.x <= canvasContext.canvas.width && position.y >= -textureSizes.y && position.y <= canvasContext.canvas.height)
             this.textureData.render(canvasContext, position, deltaTime, true, 0.001)
     }
 }
 export class SolidCollisionPiece extends TilemapPiece {
-    constructor() {
-        super(new AnimatedImageAsset(["/game_assets/collision_piece.png"]));
+    renderThisTilemap: boolean = false
+    constructor(textureSource: AnimatedImageAsset = new AnimatedImageAsset(["/game_assets/collision_piece.png"]), renderThisTilemap: boolean = false) {
+        super(textureSource);
+        this.renderThisTilemap = renderThisTilemap;
     }
     render(canvasContext: CanvasRenderingContext2D, position: Vector2, deltaTime: number) {
-        if (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyD"))
+        if (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyQ") || this.renderThisTilemap)
             super.render(canvasContext, position, deltaTime)
     }
 }
 export const REGISTERED_TILEMAP_PIECES: (() => TilemapPiece)[] = [
     () => {return new SolidCollisionPiece()},
-    () => {return new TilemapPiece(new AnimatedImageAsset(["/game_assets/sprites/test/test1.png","/game_assets/sprites/test/test2.png","/game_assets/sprites/test/test3.png"]))}
+    () => {return new TilemapPiece(new AnimatedImageAsset(["/game_assets/sprites/tiles/floor_tile.png"]))},
+    () => {return new SolidCollisionPiece(new AnimatedImageAsset(["/game_assets/sprites/tiles/wall_piece.png"]), true)},
 ]
 export function registerTilemap() {
     const tilemapGrid: TilemapPiece[] = []
@@ -71,7 +75,7 @@ export function registerTilemap() {
     console.log(tilemapGrid)
     return new Tilemap(new Vector2(ROOM_SIZE.x, ROOM_SIZE.y), tilemapGrid)
 }
-export const CAMERA_POSITION: Vector2 = new Vector2(0, 0)
+export const CAMERA_POSITION: Vector2 = new Vector2(-300, 0)
 export class Tilemap {
     tilemapSize: Vector2 = new Vector2(0, 0)
     allTiles: TilemapPiece[]

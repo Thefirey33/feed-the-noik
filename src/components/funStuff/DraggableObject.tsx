@@ -8,7 +8,7 @@ export function DraggableObject(props: {imgSource: string, alt: string}) {
     const [isButtonPressed, setIsButtonPressed] = useState(false)
     const [heldButton, setHeldButton] = useState(false)
     const [movementSway, setMovementSway] = useState(new Vector2(1, 1))
-    document.addEventListener("mousemove", (event) => {
+    window.addEventListener("mousemove", (event) => {
         setIsButtonPressed(event.buttons === 1)
         if (isHovered && isButtonPressed || heldButton) {
             setPosition(position.addition(new Vector2(event.movementX, event.movementY)))
