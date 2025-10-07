@@ -8,7 +8,10 @@ import {DraggableObject} from "./components/funStuff/DraggableObject.tsx";
 function App() {
     const [websiteLoading, setIsWebsiteLoading] = useState(true)
     window.addEventListener("load", () => {
-        setIsWebsiteLoading(false)
+        // Extra 500ms delay to prevent slow loading.
+        setTimeout(() => {
+            setIsWebsiteLoading(false)
+        }, 500)
     })
     const [languageData, setLanguageData] = useState({})
     useEffect(() => {

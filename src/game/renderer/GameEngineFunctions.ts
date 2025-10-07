@@ -1,3 +1,6 @@
+
+
+
 /**
  * The Vector2, Two-Axis Position System.
  */
@@ -47,15 +50,26 @@ export class AnimatedImageAsset {
         })
         this.aniFrame = 0
     }
-    public render(canvasContext: CanvasRenderingContext2D, position: Vector2, deltaTime: number, isAnimating: boolean = true, tilemapAniSpeed: number = 20){
+    public render(canvasContext: CanvasRenderingContext2D, position: Vector2, deltaTime: number, isAnimating: boolean = true, aniSpeed: number = 20, alignmentCenter = false){
         const currentFrame = Math.floor(this.aniFrame)
-        GameEngineFunctions.RenderImage(canvasContext, position, this.imgArray[currentFrame])
+        let newPosition = position
+        const currentImg = this.imgArray[currentFrame]
+        if (alignmentCenter)
+        {
+            // Change the new position value, so the image is centered.
+            const imgData = currentImg.imgData
+            newPosition = position.addition(new Vector2(imgData.width / 2, imgData.height / 2))
+        }
+        // Draw the image.
+        GameEngineFunctions.RenderImage(canvasContext, newPosition, currentImg)
         if (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyQ"))
         {
             GameEngineFunctions.DrawFont(canvasContext, position, `F${currentFrame}`, "white", 20)
         }
         if (isAnimating)
-            this.aniFrame = (this.aniFrame + deltaTime * tilemapAniSpeed) % this.imgArray.length;
+            this.aniFrame = (this.aniFrame + deltaTime * aniSpeed) % this.imgArray.length;
+        else
+            this.aniFrame = 0
     }
 }
 
@@ -100,6 +114,106 @@ export class KeyboardInputHandler {
 export function drawDebugText(context: CanvasRenderingContext2D, deltaTime: number){
     GameEngineFunctions.DrawFont(context, new Vector2(0, 20), `Tendrillion Debug: ${deltaTime}ms frame time`, "white", 20)
 }
+
+export class Entity {
+    /**
+     * This must contain a IDLE animation. Specified as the "idle" identifier.
+     */
+    textures: Map<string, AnimatedImageAsset>
+    position: Vector2
+    idleAnimationKey = "idle"
+    constructor(textures: Map<string, AnimatedImageAsset>, position: Vector2)
+    {
+        this.textures = textures
+        this.position = position
+    }
+
+    /**
+     * This renders the entity to the screen.
+     */
+    public render_this_object(canvas: CanvasRenderingContext2D, deltaTime: number, cameraPosition: Vector2) {
+        if (this.textures.has(this.idleAnimationKey))
+        {
+            const animatedImageKey = this.textures.get(this.idleAnimationKey)
+            animatedImageKey?.render(canvas, this.position.addition(cameraPosition), deltaTime, true, 1, true)
+        }
+    }
+}
+/**
+ * The facing values that we are probably 100% going to use.
+ */
+export class Facing {
+    public static FORWARD: string = "forward"
+    public static LEFT: string = "left"
+    public static RIGHT: string = "right"
+    public static BACK: string = "back"
+}
+/**
+ * Noik, who is who we help, for them to stay satiated etc.
+ */
+export class NikoEntity extends Entity {
+    /**
+     * What is the Noik currently facing towards?
+     */
+    currentlyFacing = "forward"
+    constructor(position: Vector2)
+    {
+        const imgs = new Map<string, AnimatedImageAsset>();
+        
+        // Texture definitions.
+
+        // Sprites for the Noik facing forward towards the camera.
+        const forwardSprites = new AnimatedImageAsset(
+            ["/game_assets/sprites/niko/forward/forward0.png", 
+            "/game_assets/sprites/niko/forward/forward1.png", 
+            "/game_assets/sprites/niko/forward/forward2.png", 
+            "/game_assets/sprites/niko/forward/forward3.png"
+        ])
+        // Sprites for the Noik facing left.
+        const leftSprites = new AnimatedImageAsset([
+            "/game_assets/sprites/niko/left/left0.png", 
+            "/game_assets/sprites/niko/left/left1.png", 
+            "/game_assets/sprites/niko/left/left2.png", 
+            "/game_assets/sprites/niko/left/left3.png"
+        ])
+        // Sprites for the Noik facing right.
+        const rightSprites = new AnimatedImageAsset([
+            "/game_assets/sprites/niko/right/right0.png", 
+            "/game_assets/sprites/niko/right/right1.png", 
+            "/game_assets/sprites/niko/right/right2.png", 
+            "/game_assets/sprites/niko/right/right3.png"
+        ])
+        // Sprites for the Noik facing forward, but not towards the camera.
+        const backSprites = new AnimatedImageAsset([
+            "/game_assets/sprites/niko/back/back0.png", 
+            "/game_assets/sprites/niko/back/back1.png", 
+            "/game_assets/sprites/niko/back/back2.png", 
+            "/game_assets/sprites/niko/back/back3.png"
+        ])
+
+        // Add the now registered textures to the map.
+        imgs.set("forward", forwardSprites)
+        imgs.set("right", rightSprites)
+        imgs.set("left", leftSprites)
+        imgs.set("back", backSprites)
+        // forward sprite locations.
+        super(imgs,
+        position)
+    }
+    public render_this_object(canvas: CanvasRenderingContext2D, deltaTime: number, cameraPosition: Vector2): void {
+        const currentFrame = this.textures.get(this.currentlyFacing)
+        if (currentFrame !== undefined)
+        {
+            const textureDat = currentFrame.imgArray[0].imgData
+            const cameraAdjustedPosition = this.position.addition(cameraPosition)
+            // Draw the shadow circle.
+            GameEngineFunctions.DrawCircle(canvas, "rgba(0, 0, 0, 0.5)", cameraAdjustedPosition.addition(new Vector2(textureDat?.width, textureDat?.height * 1.5)), new Vector2(20, 5))
+            currentFrame.render(canvas, cameraAdjustedPosition, deltaTime, true, 0.005, true)
+            this.position = new Vector2(this.position.x, this.position.y + (GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)) * 100)
+            console.log(this.position)
+        }
+    }
+}
 /**
  * Base GameEngineFunctions, filled with rendering functions.
  */
@@ -122,8 +236,10 @@ export class GameEngineFunctions {
      * @constructor
      */
     public static RenderRect(canvasContext: CanvasRenderingContext2D, position: Vector2, size: Vector2, color: string){
+        canvasContext.beginPath()
         canvasContext.fillStyle = color;
         canvasContext.fillRect(position.x, position.y, size.x, size.y);
+        canvasContext.closePath()
     }
 
     /**
@@ -168,5 +284,12 @@ export class GameEngineFunctions {
 
     public static getActualDeltaTimeNumber(rawDeltaTime: number): number {
         return rawDeltaTime / 1000;
+    }
+    public static DrawCircle(canvasContext: CanvasRenderingContext2D, color: string, position: Vector2, radius: Vector2){
+        canvasContext.beginPath()
+        canvasContext.fillStyle = color
+        canvasContext.ellipse(position.x, position.y, radius.x, radius.y, 0, 0, Math.PI * 2, false)
+        canvasContext.fill()
+        canvasContext.closePath()
     }
 }

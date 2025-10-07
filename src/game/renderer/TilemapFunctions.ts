@@ -1,17 +1,18 @@
+
 import {AnimatedImageAsset, KeyboardInputHandler, Vector2} from "./GameEngineFunctions.ts";
 
 export const BASE_TILE_SIZE = new Vector2(64, 64)
 export const ROOM_SIZE = new Vector2(20, 40)
 export class TilemapPiece {
     textureData?: AnimatedImageAsset
-
+    locationInformationCurrent: Vector2
     /**
      * To register a tilemap to the registry, an texture source is needed only.
      * @param textureSource The texture source of the tilemap, when the importing is going on, the TILES.dat file, will be fetched first to form the game world.
      */
     constructor(textureSource?: AnimatedImageAsset) {
         this.textureData = textureSource
-
+        this.locationInformationCurrent = new Vector2(0, 0)
     }
 
     /**
@@ -100,8 +101,25 @@ export class Tilemap {
                 tilePiecePosition.y += tileMapTextureSize.y;
             }
             // If the tilemap renderer's current location is greater than the specified amount of tiles to be rendered, then do some cool stuff.
-            currentTile.render(canvasContext, new Vector2(tilePiecePosition.x + CAMERA_POSITION.x, tilePiecePosition.y + CAMERA_POSITION.y), deltaTime)
+            const locationInformation = new Vector2(tilePiecePosition.x + CAMERA_POSITION.x, tilePiecePosition.y + CAMERA_POSITION.y)
+            currentTile.locationInformationCurrent = locationInformation
+            currentTile.render(canvasContext, locationInformation, deltaTime)
             tilePiecePosition.x += tileMapTextureSize.x;
         }
+    }
+    /**
+     * This function gets the tilemap in that location.
+     * @param position The location to check.
+     * @returns The tilemap piece that's corresponding. If a tilemap hasn't been found in the context, then it will return undefined.
+     */
+    public getTilemapInThatLocation(position: Vector2): TilemapPiece | undefined {
+        this.allTiles.forEach((_selfTilemapPiece) => {
+            // The location of the tile in the current context. (Top-Left)
+            const locationOfTile = _selfTilemapPiece.locationInformationCurrent
+            const textureSizes = _selfTilemapPiece.getTextureSize()
+            if (locationOfTile.x > position.x && locationOfTile.y > position.y && locationOfTile.x + textureSizes.x < position.x && locationOfTile.y + textureSizes.y < position.y)
+                return _selfTilemapPiece  
+        })
+        return undefined;
     }
 }
