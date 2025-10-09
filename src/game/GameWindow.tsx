@@ -47,10 +47,23 @@ export function GameWindow() {
                 })
                 return;
             }
-            const horizontalX = KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyA") ? 1 : (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyD") ? -1 : 0)
-            const verticalY = KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyW") ? 1 : (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyS") ? -1 : 0)
-            CAMERA_POSITION.x += horizontalX * 300 * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)
-            CAMERA_POSITION.y += verticalY * 300 * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)
+            // Base level camera positioning system.
+            if (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyQ"))
+            {
+                const horizontalX = KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyA") ? 1 : (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyD") ? -1 : 0)
+                const verticalY = KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyW") ? 1 : (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyS") ? -1 : 0)
+                CAMERA_POSITION.x += horizontalX * 300 * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)
+                CAMERA_POSITION.y += verticalY * 300 * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)
+            }
+            else
+            {
+                // FUCK THIS SHIT
+                const futureCameraPositionX = (noikEntity.position.x - gameCanvas.width / 1.21)
+                const futureCameraPositionY = (noikEntity.position.y - gameCanvas.height * 1.25)
+                // Camera Position System
+                CAMERA_POSITION.x += (futureCameraPositionX - CAMERA_POSITION.x) / 50
+                CAMERA_POSITION.y += (futureCameraPositionY - CAMERA_POSITION.y) / 50
+            }
             generatedTilemap.render(context, deltaTime)
             noikEntity.render_this_object(context, deltaTime, CAMERA_POSITION)
             OLD_DELTA_TIME = Date.now()

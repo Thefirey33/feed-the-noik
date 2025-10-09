@@ -209,8 +209,7 @@ export class NikoEntity extends Entity {
             // Draw the shadow circle.
             GameEngineFunctions.DrawCircle(canvas, "rgba(0, 0, 0, 0.5)", cameraAdjustedPosition.addition(new Vector2(textureDat?.width, textureDat?.height * 1.5)), new Vector2(20, 5))
             currentFrame.render(canvas, cameraAdjustedPosition, deltaTime, true, 0.005, true)
-            this.position = new Vector2(this.position.x, this.position.y + (GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)) * 100)
-            console.log(this.position)
+            GameEngineFunctions.RenderRect(canvas, this.position, new Vector2(10, 10), "red")
         }
     }
 }

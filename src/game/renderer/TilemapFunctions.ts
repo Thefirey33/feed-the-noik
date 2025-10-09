@@ -77,6 +77,7 @@ export function registerTilemap() {
     return new Tilemap(new Vector2(ROOM_SIZE.x, ROOM_SIZE.y), tilemapGrid)
 }
 export const CAMERA_POSITION: Vector2 = new Vector2(-300, 0)
+
 export class Tilemap {
     tilemapSize: Vector2 = new Vector2(0, 0)
     allTiles: TilemapPiece[]
