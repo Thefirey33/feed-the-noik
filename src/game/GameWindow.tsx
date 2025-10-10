@@ -6,7 +6,7 @@ import {
     NikoEntity,
     Vector2
 } from "./renderer/GameEngineFunctions.ts";
-import {CAMERA_POSITION, registerTilemap} from "./renderer/TilemapFunctions.ts";
+import {CAMERA_POSITION, CAMERA_VELOCITY, registerTilemap} from "./renderer/TilemapFunctions.ts";
 
 export function GameWindow() {
     // When the component successfully mounts, start loading all the assets.
@@ -15,7 +15,7 @@ export function GameWindow() {
         const context = gameCanvas.getContext("2d")
         const keyboardInputHandler = new KeyboardInputHandler()
         // Entities that are very very crucial.
-        const noikEntity = new NikoEntity(new Vector2(400, 400))
+        const noikEntity = new NikoEntity(new Vector2(gameCanvas.width, gameCanvas.height))
         // If the context is null, then give out an error message.
         if (context === null) {
             alert("Whoops! Your browser doesn't support canvas.")
@@ -57,15 +57,20 @@ export function GameWindow() {
             }
             else
             {
-                // FUCK THIS SHIT
-                const futureCameraPositionX = (noikEntity.position.x - gameCanvas.width / 1.21)
-                const futureCameraPositionY = (noikEntity.position.y - gameCanvas.height * 1.25)
+                function returnDeltaTimedCameraPos(cameraPos: number,  cameraRealPos: number){
+                    return (cameraPos - cameraRealPos) * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime) * CAMERA_VELOCITY;
+                }
+                // COOL CAMERA SYSTEM.
+                const futureCameraPositionX = -(noikEntity.position.x) + gameCanvas.width / 2
+                const futureCameraPositionY = -(noikEntity.position.y) + gameCanvas.height / 2
                 // Camera Position System
-                CAMERA_POSITION.x += (futureCameraPositionX - CAMERA_POSITION.x) / 50
-                CAMERA_POSITION.y += (futureCameraPositionY - CAMERA_POSITION.y) / 50
+                CAMERA_POSITION.x += returnDeltaTimedCameraPos(futureCameraPositionX, CAMERA_POSITION.x)
+                CAMERA_POSITION.y += returnDeltaTimedCameraPos(futureCameraPositionY, CAMERA_POSITION.y)
             }
             generatedTilemap.render(context, deltaTime)
             noikEntity.render_this_object(context, deltaTime, CAMERA_POSITION)
+            console.log(noikEntity.position)
+            console.log(CAMERA_POSITION)
             OLD_DELTA_TIME = Date.now()
         }, 1)
     }, []);

@@ -200,16 +200,16 @@ export class NikoEntity extends Entity {
         super(imgs,
         position)
     }
-    public render_this_object(canvas: CanvasRenderingContext2D, deltaTime: number, cameraPosition: Vector2): void {
+    public render_this_object(canvas: CanvasRenderingContext2D, deltaTime: number, _cameraPosition: Vector2): void {
         const currentFrame = this.textures.get(this.currentlyFacing)
         if (currentFrame !== undefined)
         {
-            const textureDat = currentFrame.imgArray[0].imgData
-            const cameraAdjustedPosition = this.position.addition(cameraPosition)
+            // Draw the noik to the center of the screen.
+            const firstTexture = currentFrame.imgArray[0].imgData
+            const cameraAdjustedPosition = new Vector2((this.position.x + _cameraPosition.x) - firstTexture.width, (this.position.y + _cameraPosition.y) - firstTexture.height)
             // Draw the shadow circle.
-            GameEngineFunctions.DrawCircle(canvas, "rgba(0, 0, 0, 0.5)", cameraAdjustedPosition.addition(new Vector2(textureDat?.width, textureDat?.height * 1.5)), new Vector2(20, 5))
+            GameEngineFunctions.DrawCircle(canvas, "rgba(0, 0, 0, 0.5)", cameraAdjustedPosition.addition(new Vector2(firstTexture.width, firstTexture.height * 1.5)), new Vector2(20, 5))
             currentFrame.render(canvas, cameraAdjustedPosition, deltaTime, true, 0.005, true)
-            GameEngineFunctions.RenderRect(canvas, this.position, new Vector2(10, 10), "red")
         }
     }
 }

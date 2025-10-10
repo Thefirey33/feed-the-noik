@@ -76,7 +76,15 @@ export function registerTilemap() {
     console.log(tilemapGrid)
     return new Tilemap(new Vector2(ROOM_SIZE.x, ROOM_SIZE.y), tilemapGrid)
 }
-export const CAMERA_POSITION: Vector2 = new Vector2(-300, 0)
+
+/**
+ * The position of the camera in-game.
+ */
+export const CAMERA_POSITION: Vector2 = new Vector2(0, 0)
+/**
+ * The velocity/speed of the camera in-game.
+ */
+export const CAMERA_VELOCITY = 20
 
 export class Tilemap {
     tilemapSize: Vector2 = new Vector2(0, 0)
