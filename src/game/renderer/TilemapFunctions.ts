@@ -84,7 +84,7 @@ export const CAMERA_POSITION: Vector2 = new Vector2(0, 0)
 /**
  * The velocity/speed of the camera in-game.
  */
-export const CAMERA_VELOCITY = 20
+export const CAMERA_VELOCITY = 5
 
 export class Tilemap {
     tilemapSize: Vector2 = new Vector2(0, 0)

@@ -5,4 +5,14 @@ export class SoundSystem {
         audioElement.currentTime = 0;
         audioElement.play().then()
     }
+    /**
+     * Set the volume number.
+     * @param volSpecified Vol Percentage.
+     */
+    public setVolume(volSpecified: number){
+        const audioList = document.querySelectorAll("audio") as NodeListOf<HTMLAudioElement>
+        audioList.forEach((value) => {
+            value.volume = volSpecified
+        })
+    }
 }

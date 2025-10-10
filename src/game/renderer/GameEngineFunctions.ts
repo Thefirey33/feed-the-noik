@@ -15,6 +15,11 @@ export class Vector2{
     {
         return new Vector2(this.x + other.x, this.y + other.y)
     }
+    addition_self(other: Vector2)
+    {
+        this.x += other.x
+        this.y += other.y
+    }
 }
 export const AMOUNT_OF_IMAGES_LEFT: string[] = []
 export const GLOBAL_FONT = "TerminusTTF"
@@ -86,6 +91,7 @@ export class KeyboardInputHandler {
         KeyboardInputHandler.instance = this;
         document.addEventListener("keydown", (keyEvent) => {
             const keyCodeCurrent = keyEvent.code;
+            console.log(keyCodeCurrent)
             if (this.currentPressedKeyCollection.indexOf(keyCodeCurrent) === -1)
             {
                 // Add this to the key-pressed collection.
@@ -101,7 +107,16 @@ export class KeyboardInputHandler {
             }
         })
     }
-
+    /**
+     * This function does an axis function, for movement.
+     * @param plusKeycode The keycode that is positive.
+     * @param negativeKeycode The keycode that is negative.
+     * @returns An Axis Number.
+     */
+    public getAxis(plusKeycode: string, negativeKeycode: string)
+    {
+        return this.checkIfKeyIsPressed(plusKeycode) ? 1 : (this.checkIfKeyIsPressed(negativeKeycode) ? -1 : 0)
+    }
     /**
      * Check if a key has been pressed recently.
      * @param keycode The keycode to check for.
@@ -200,17 +215,52 @@ export class NikoEntity extends Entity {
         super(imgs,
         position)
     }
+    ANI_SPEED = 0.008
+    WALK_SPEED = 100
+    /**
+     * This function draws the noik to the screen.
+     * @param canvas The screen to draw to.
+     * @param deltaTime The deltaTime number, for keeping the frametimes perfect.
+     * @param _cameraPosition The current cam position.
+     */
     public render_this_object(canvas: CanvasRenderingContext2D, deltaTime: number, _cameraPosition: Vector2): void {
         const currentFrame = this.textures.get(this.currentlyFacing)
         if (currentFrame !== undefined)
         {
+            // Get the instance of the keyboard input handler.
+            const keyboardInputHandler = KeyboardInputHandler.instance;
+
             // Draw the noik to the center of the screen.
             const firstTexture = currentFrame.imgArray[0].imgData
             const cameraAdjustedPosition = new Vector2((this.position.x + _cameraPosition.x) - firstTexture.width, (this.position.y + _cameraPosition.y) - firstTexture.height)
+            // the noik's movement.
+            const horizontalMovement = this.deltaTimeCalculation(keyboardInputHandler.getAxis("KeyD", "KeyA"), deltaTime)
+            const verticalMovement = this.deltaTimeCalculation(keyboardInputHandler.getAxis("KeyS", "KeyW"), deltaTime)
             // Draw the shadow circle.
             GameEngineFunctions.DrawCircle(canvas, "rgba(0, 0, 0, 0.5)", cameraAdjustedPosition.addition(new Vector2(firstTexture.width, firstTexture.height * 1.5)), new Vector2(20, 5))
-            currentFrame.render(canvas, cameraAdjustedPosition, deltaTime, true, 0.005, true)
+            currentFrame.render(canvas, cameraAdjustedPosition, deltaTime, (horizontalMovement !== 0 || verticalMovement !== 0), this.ANI_SPEED, true)
+            // change the way the noik is facing, with this switch case.
+            this.setupMovementFacing(horizontalMovement, Facing.RIGHT, Facing.LEFT)
+            this.setupMovementFacing(verticalMovement, Facing.FORWARD, Facing.BACK)
+            // change the position with the movement.
+            this.position.addition_self(new Vector2(horizontalMovement, verticalMovement))
         }
+    }
+    deltaTimeCalculation(val1: number, delt: number){
+        return val1 * this.WALK_SPEED * GameEngineFunctions.getActualDeltaTimeNumber(delt)
+    }
+    /**
+     * This function changes the way the noik is facing based on the movement value.
+     * @param value The movement value.
+     * @param positiveFaceValue When the value is positive, this is the value the face is set to.
+     * @param negativeFaceValue When the value is negative, this is the value the face is set to.
+     */
+    setupMovementFacing(value: number, positiveFaceValue: string, negativeFaceValue: string)
+    {
+        if (value > 0)
+            this.currentlyFacing = positiveFaceValue
+        else if (value < 0)
+            this.currentlyFacing = negativeFaceValue
     }
 }
 /**
