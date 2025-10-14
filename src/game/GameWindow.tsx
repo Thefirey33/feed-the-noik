@@ -7,7 +7,7 @@ import {
     Vector2
 } from "./renderer/GameEngineFunctions.ts";
 import {CAMERA_POSITION, CAMERA_VELOCITY, registerTilemap} from "./renderer/TilemapFunctions.ts";
-import { SoundSystem } from "../SoundSystem.tsx";
+import { SoundSystem } from "../SoundSystem.ts";
 
 
 export function GameWindow() {
@@ -16,7 +16,6 @@ export function GameWindow() {
         let ALLOW_LAUNCH = false
         const gameCanvas = document.getElementById("gameCanvas") as HTMLCanvasElement;
         const context = gameCanvas.getContext("2d")
-        const soundSystem = new SoundSystem()
         const keyboardInputHandler = new KeyboardInputHandler()
         // Entities that are very very crucial.
         const noikEntity = new NikoEntity(new Vector2(gameCanvas.width, gameCanvas.height))
@@ -39,8 +38,7 @@ export function GameWindow() {
             {
                 gameCanvas.style.cursor = "default";
                 // Play the background music.
-                soundSystem.playAudio("bgm")
-                soundSystem.setVolume(0.5);
+                SoundSystem.playAudio("bgm")
                 ALLOW_LAUNCH = true
                 setInterval(() => {
                     keptLoadingStrings = []
@@ -96,7 +94,7 @@ export function GameWindow() {
 
     return (
         <>
-            <canvas className={"bg-black absolute m-auto left-0 right-0 top-0 bottom-0 border-4 rounded-md border-yellow-300"}
+            <canvas className={"bg-black absolute m-auto left-0 right-0 top-0 bottom-0 md:w-150 w-100 border-4 rounded-md border-yellow-300"}
             style={{imageRendering: "pixelated"}}
                     id={"gameCanvas"}
                     width={640} height={480}></canvas>

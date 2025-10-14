@@ -1,8 +1,7 @@
-import {SoundSystem} from "../SoundSystem.tsx";
+import {SoundSystem} from "../SoundSystem.ts";
 
 
 export function MessageBox(props: {topHeader: string, whenClosed: () => void, languageData: {[key: string]: string}}) {
-    const soundSystem = new SoundSystem()
 
     if (props.topHeader === "")
         return <></>
@@ -15,11 +14,11 @@ export function MessageBox(props: {topHeader: string, whenClosed: () => void, la
                     <button
                         className="text-black mt-5 bg-yellow-300 ml-auto mr-auto p-3 w-fit rounded-xl h-fit hover:scale-120 transition-all duration-75 focus:bg-yellow-50 cursor-pointer"
                         onMouseEnter={() => {
-                            soundSystem.playAudio("cursor");
+                            SoundSystem.playAudio("cursor");
                         }}
                         onClick={() => {
                             // Set Message Box state, back to nothing.
-                            soundSystem.playAudio("cancel");
+                            SoundSystem.playAudio("cancel");
                             props.whenClosed()
                         }}>{props.languageData["ok"]}
                     </button>

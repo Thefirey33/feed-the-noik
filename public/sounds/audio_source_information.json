@@ -1,0 +1,22 @@
+[
+    {
+        "id": "/sounds/menu_decision.wav",
+        "name": "decision"
+    },
+    {
+        "id": "/sounds/menu_cancel.wav",
+        "name": "cancel"
+    },
+    {
+        "id": "/sounds/menu_buzzer.wav",
+        "name": "buzzer"
+    },
+    {
+        "id": "/sounds/cat_1.wav",
+        "name": "cat_1"
+    },
+    {
+        "id": "/sounds/game/LibraryStroll.ogg",
+        "name": "bgm"
+    }
+]

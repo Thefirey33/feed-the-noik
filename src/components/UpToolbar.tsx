@@ -1,20 +1,19 @@
 import "../App.css"
 import * as React from "react";
-import {SoundSystem} from "../SoundSystem.tsx";
+import {SoundSystem} from "../SoundSystem.ts";
 import { MessageBox } from "./MessageBox.tsx";
 import {useRef} from "react";
 
 export function UpToolbar(props: {languageData: { [key: string]: string}}) {
     function ToolbarButton (props: {onClick?: () => void, children: React.JSX.Element | string}) {
-        const soundSystem = new SoundSystem()
         return (
             <>
                 <button className="bg-yellow-300 rounded-xl p-2 m-2 min-w-10 hover:scale-120 cursor-pointer transition-all duration-75 focus:bg-yellow-50" onMouseEnter={() =>
                     {
-                        soundSystem.playAudio("cursor");
+                        SoundSystem.playAudio("cursor");
                     }
                 } onClick={() => {
-                    soundSystem.playAudio("decision");
+                    SoundSystem.playAudio("decision");
                     props.onClick?.();
                 }}>
                     <h1 className="text-black font-scaling">{props.children}</h1>
@@ -22,7 +21,6 @@ export function UpToolbar(props: {languageData: { [key: string]: string}}) {
             </>
         )
     }
-    const soundSystem = new SoundSystem()
     const countOfTimesYouDecidedToMeow = useRef(1)
     const [messageBoxText, setMessageBoxText] = React.useState("")
     return (
@@ -50,7 +48,7 @@ export function UpToolbar(props: {languageData: { [key: string]: string}}) {
                         }</ToolbarButton>
                         <ToolbarButton onClick={() => {
                             setTimeout(() => {
-                                soundSystem.playAudio("cat_1")
+                                SoundSystem.playAudio("cat_1")
                                 setMessageBoxText((props.languageData["meowText"] + "\n").repeat(countOfTimesYouDecidedToMeow.current))
                                 countOfTimesYouDecidedToMeow.current++
                             }, 1000)

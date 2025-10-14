@@ -91,7 +91,7 @@ export class KeyboardInputHandler {
         KeyboardInputHandler.instance = this;
         document.addEventListener("keydown", (keyEvent) => {
             const keyCodeCurrent = keyEvent.code;
-            console.log(keyCodeCurrent)
+            
             if (this.currentPressedKeyCollection.indexOf(keyCodeCurrent) === -1)
             {
                 // Add this to the key-pressed collection.

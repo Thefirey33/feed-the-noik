@@ -71,7 +71,6 @@ export function registerTilemap() {
                     tilemapGrid.push(REGISTERED_TILEMAP_PIECES[parseInt(valueKey)]())
                 }
             }
-            console.log(tilemapGrid)
         })
     console.log(tilemapGrid)
     return new Tilemap(new Vector2(ROOM_SIZE.x, ROOM_SIZE.y), tilemapGrid)
