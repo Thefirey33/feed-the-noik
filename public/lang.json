@@ -6,5 +6,8 @@
   "creditsButton": "OneShot is a game by FutureCat LLC.\nMade in React by a ADHD-infused developer.\nthe other parts of the website are made in Svelte, which... (i shouldn't have used Svelte for the other parts... man it was a struggle. D:)",
   "ok": "aight",
   "funnyButton": "the funy button",
-  "meowText": "(Niko just made a meow sound.)"
+  "meowText": "(Niko just made a meow sound.)",
+  "errorOhNo": "Your display doesn't support the game, we're sorry.",
+  "keepMeEntertained": "Keep Me Entertained!!!",
+  "clickHereToStart": "click here to start the noik's adventure!"
 }

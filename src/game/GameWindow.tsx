@@ -7,7 +7,8 @@ import {
     Vector2
 } from "./renderer/GameEngineFunctions.ts";
 import {CAMERA_POSITION, CAMERA_VELOCITY, registerTilemap} from "./renderer/TilemapFunctions.ts";
-import { SoundSystem } from "../SoundSystem.ts";
+import { isMobileUser, LanguageSystem, SoundSystem } from "../GeneralStuff.ts";
+import { DialogSystem } from "./renderer/DialogSystem.ts";
 
 
 export function GameWindow() {
@@ -30,15 +31,19 @@ export function GameWindow() {
         let keptLoadingStrings: string[] = []
         // Starting point.
         GameEngineFunctions.ClearCanvas(context)
-        GameEngineFunctions.DrawFont(context, new Vector2(0, gameCanvas.height / 2), "click here to play!", "white", 20)
+        GameEngineFunctions.DrawFont(context, new Vector2(0, gameCanvas.height / 2), LanguageSystem.getLanguageData("clickHereToStart"), "white", 20)
         gameCanvas.style.cursor = "pointer";
         // This begins the game loop.
         gameCanvas.addEventListener("click", () => {
             if (!ALLOW_LAUNCH)
             {
+                if (isMobileUser)
+                {
+                    // TODO: Add mobile support.
+                }
                 gameCanvas.style.cursor = "default";
                 // Play the background music.
-                SoundSystem.playAudio("bgm")
+                SoundSystem.playAudio("bgm", true)
                 ALLOW_LAUNCH = true
                 setInterval(() => {
                     keptLoadingStrings = []
@@ -54,6 +59,7 @@ export function GameWindow() {
                             const loadingString = `Loading ${value}...`
                             if (!(keptLoadingStrings.includes(loadingString))) {
                                 keptLoadingStrings.push(loadingString)
+                                GameEngineFunctions.DrawFont(context, new Vector2(0, gameCanvas.height - 10), "Tendrillion", "red", 20)
                                 GameEngineFunctions.DrawFont(context, textYPosition, loadingString, "white", 20)
                                 textYPosition.y += 20;
                         }
@@ -83,11 +89,18 @@ export function GameWindow() {
                     generatedTilemap.render(context, deltaTime)
                     // Render the noik Entity, probably the most important entity in the whole game.
                     noikEntity.render_this_object(context, deltaTime, CAMERA_POSITION)
+                    // Render the current dialog.
+                    DialogSystem.renderDialog(context, deltaTime)
                     // Draw the debug stuff.
                     if (keyboardInputHandler.checkIfKeyIsPressed("KeyQ"))
                         drawDebugText(context, deltaTime)
                     OLD_DELTA_TIME = Date.now()
-            }, 1)
+                    // Render the mobile controls to the screen if we are on mobile.
+                    if (isMobileUser)
+                    {
+                        // TODO: Draw mobile controls on the screen.
+                    }
+                }, 1)
             }
         })
     }, []);

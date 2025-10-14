@@ -9,6 +9,28 @@ class BlobContainer {
         this.audioSource = new Audio(this.blobUrl)
     }
 }
+export class LanguageSystem {
+    public static LanguageData : {[key: string]: string} = {}
+    public static SetAllLanguageData(languageData: ({[key: string]: string})){
+        LanguageSystem.LanguageData = languageData
+        console.log(LanguageSystem.LanguageData)
+    }
+    public static getLanguageData(keyName: string){
+        console.log(LanguageSystem.LanguageData)
+        return LanguageSystem.LanguageData[keyName]
+    }
+}
+// If the player is a mobile user, add mobile specific functions.
+
+/**
+ * The User Agent RegEx, responsible for checking if the user has a mobile device. 
+ */
+const userAgentRegExTest = /Android|Macintosh|iPad|iPhone/g
+/**
+ * If the user is a mobile user, this flag will be set to true.
+ */
+export const isMobileUser = userAgentRegExTest.test(window.navigator.userAgent)
+
 export class SoundSystem {
     public static Sounds : Map<string, BlobContainer> = new Map<string, BlobContainer>();
 
@@ -80,15 +102,26 @@ export class SoundSystem {
     /**
      * This function plays an audio file, through the fetched blob content.
      * @param audioSrc The audio source to play.
+     * @param [looping=false] If the audio should loop or not.
      */
-    public static playAudio(audioSrc: string){
+    public static playAudio(audioSrc: string, looping: boolean = false, notPlayIfPlaying = false){
         if (SoundSystem.Sounds.has(audioSrc)){
             const recievedBlob = SoundSystem.Sounds.get(audioSrc)
             if (recievedBlob != undefined)
             {
+                const source = recievedBlob.audioSource
                 // Play the already loaded sound file, please.
-                recievedBlob.audioSource.currentTime = 0
-                recievedBlob.audioSource.play()
+                source.currentTime = 0
+                source.play()
+                if (looping)
+                {
+                    if (notPlayIfPlaying && !(source.currentTime != 0))
+                        return;
+                    source.addEventListener("ended", () => {
+                        source.currentTime = 0
+                        source.play()
+                    })
+                }
             }
         }
     }
@@ -96,7 +129,7 @@ export class SoundSystem {
      * Set the volume number.
      * @param volSpecified Vol Percentage.
      */
-    public setGlobalVolume(volSpecified: number){
+    public static setGlobalVolume(volSpecified: number){
         // Go through all of the sound files, set the one that's specified.
         SoundSystem.Sounds.forEach((soundElement) => {
             soundElement.audioSource.volume = volSpecified

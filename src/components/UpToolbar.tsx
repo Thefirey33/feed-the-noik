@@ -1,6 +1,6 @@
 import "../App.css"
 import * as React from "react";
-import {SoundSystem} from "../SoundSystem.ts";
+import {SoundSystem} from "../GeneralStuff.ts";
 import { MessageBox } from "./MessageBox.tsx";
 import {useRef} from "react";
 

@@ -302,7 +302,11 @@ export class GameEngineFunctions {
         canvasContext.fillStyle = color;
         canvasContext.font = `${size}px ${GLOBAL_FONT}`;
     }
-
+    public static MeasureFont(canvasContext: CanvasRenderingContext2D, text: string, size: number)
+    {
+        GameEngineFunctions.TextInitialization(canvasContext, "black", size)
+        return canvasContext.measureText(text)
+    }
     /**
      * This function draws a string to the screen.
      * @param canvasContext The canvas context, or screen to the draw to.

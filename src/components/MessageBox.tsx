@@ -1,4 +1,4 @@
-import {SoundSystem} from "../SoundSystem.ts";
+import {SoundSystem} from "../GeneralStuff.ts";
 
 
 export function MessageBox(props: {topHeader: string, whenClosed: () => void, languageData: {[key: string]: string}}) {

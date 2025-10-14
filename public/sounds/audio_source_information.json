@@ -18,5 +18,9 @@
     {
         "id": "/sounds/game/LibraryStroll.ogg",
         "name": "bgm"
+    },
+    {
+        "id": "/sounds/text.wav",
+        "name": "text"
     }
 ]
