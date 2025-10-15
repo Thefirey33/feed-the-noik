@@ -1,3 +1,4 @@
+import { Vector2 } from "./game/renderer/GameEngineFunctions"
 
 class BlobContainer {
     blobItself: Blob
@@ -30,6 +31,13 @@ const userAgentRegExTest = /Android|Macintosh|iPad|iPhone/g
  * If the user is a mobile user, this flag will be set to true.
  */
 export const isMobileUser = userAgentRegExTest.test(window.navigator.userAgent)
+
+/**
+ * The virtual mouse cursor that basically shows the current position of the virtual mouse cursor,
+ * meant for mobile devices.
+ */
+export const virtualMouseCursor : Vector2[] = []
+
 
 export class SoundSystem {
     public static Sounds : Map<string, BlobContainer> = new Map<string, BlobContainer>();

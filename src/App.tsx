@@ -36,7 +36,7 @@ function App() {
             LanguageSystem.SetAllLanguageData(data)
         })
     }, []);
-    if (window.innerWidth < 400 || window.innerHeight < 480)
+    if (window.innerWidth < 640 || window.innerHeight < 480)
     {
         return (
             <div className='flex flex-col'>

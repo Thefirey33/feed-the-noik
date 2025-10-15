@@ -1,5 +1,5 @@
 import { SoundSystem } from "../../GeneralStuff"
-import { GameEngineFunctions, ImageAsset, Vector2 } from "./GameEngineFunctions"
+import { GameEngineFunctions, ImageAsset } from "./GameEngineFunctions"
 
 
 /**
@@ -35,7 +35,7 @@ export class DialogSystem {
     /**
      * The current dialog that's being displayed.
      */
-    public static currentDialog: string = "Hello, Player?"
+    public static currentDialog: string = ""
     /**
      * The last text length that the last character represented.
      */
@@ -70,6 +70,8 @@ export class DialogSystem {
      * @param deltaTime The deltaTime number, used for general frame-match.
      */
     public static renderDialog(context: CanvasRenderingContext2D, deltaTime: number){
+        if (this.currentDialog.length <= 0)
+            return;
         const selfCanvas = context.canvas
         const yTopFirst = selfCanvas.height - this.dialogMargin * 2
         const dialogueBoxWidth = selfCanvas.width - this.dialogMargin * 2

@@ -7,9 +7,8 @@ import {
     Vector2
 } from "./renderer/GameEngineFunctions.ts";
 import {CAMERA_POSITION, CAMERA_VELOCITY, registerTilemap} from "./renderer/TilemapFunctions.ts";
-import { isMobileUser, LanguageSystem, SoundSystem } from "../GeneralStuff.ts";
+import { isMobileUser, LanguageSystem, SoundSystem, virtualMouseCursor } from "../GeneralStuff.ts";
 import { DialogSystem } from "./renderer/DialogSystem.ts";
-
 
 export function GameWindow() {
     // When the component successfully mounts, start loading all the assets.
@@ -39,7 +38,30 @@ export function GameWindow() {
             {
                 if (isMobileUser)
                 {
-                    // TODO: Add mobile support.
+                    gameCanvas.addEventListener("contextmenu", (contextMenu) => {
+                        contextMenu.preventDefault()
+                    })
+                    function handleTouchEvent(touchEvent: TouchEvent){
+                        touchEvent.preventDefault()
+                        gameCanvas.focus()
+                        const touchLocation = touchEvent.changedTouches.item(0)
+                        if (touchLocation != undefined)
+                        {
+                            // This thing gets the nearest location of the touch that the current player holds.
+                            virtualMouseCursor.push(
+                                new Vector2(
+                                    touchLocation.pageX - gameCanvas.offsetLeft, 
+                                    touchLocation.pageY - gameCanvas.offsetTop
+                                )
+                            )
+                        }
+                    }
+                    gameCanvas.addEventListener("touchmove", (touchEvent) => {
+                        virtualMouseCursor.splice(0, virtualMouseCursor.length)
+                        handleTouchEvent(touchEvent)
+                    })
+                    gameCanvas.addEventListener("touchstart", (touchEvent) => handleTouchEvent(touchEvent))
+                    gameCanvas.addEventListener("touchend", (lastTouchEvent) => virtualMouseCursor.splice(0, virtualMouseCursor.length))
                 }
                 gameCanvas.style.cursor = "default";
                 // Play the background music.
@@ -98,7 +120,30 @@ export function GameWindow() {
                     // Render the mobile controls to the screen if we are on mobile.
                     if (isMobileUser)
                     {
-                        // TODO: Draw mobile controls on the screen.
+                        function renderMobileButton(context: CanvasRenderingContext2D, position: Vector2, text: string, controlToActive: string, scale: Vector2 = new Vector2(50, 50)){
+                            let isHoveringOverThisItem = false
+                            virtualMouseCursor.forEach((virtualMouseCursorPos) => {
+                                if (!isHoveringOverThisItem)
+                                    isHoveringOverThisItem = (virtualMouseCursorPos.x > position.x && virtualMouseCursorPos.y > position.y && position.x + scale.x > virtualMouseCursorPos.x && position.y + scale.y > virtualMouseCursorPos.y)
+                            })
+                            const newColorToRender = isHoveringOverThisItem ? 100 : 0
+                            GameEngineFunctions.RenderRect(context, position.addition(new Vector2(-3, -3)), scale.addition(new Vector2(6, 6)), "white")
+                            GameEngineFunctions.RenderRect(context, position, scale, `rgba(${newColorToRender}, ${newColorToRender}, ${newColorToRender}, 1)`)
+                            GameEngineFunctions.DrawFont(context, position.addition(new Vector2(0, scale.y * 0.8)), text, "white", 20)
+                            const indexOfThing = KeyboardInputHandler.instance.currentPressedKeyCollection.indexOf(controlToActive)
+                            if (indexOfThing == -1 && isHoveringOverThisItem)
+                                KeyboardInputHandler.instance.currentPressedKeyCollection.push(controlToActive)
+                            else if (indexOfThing != -1 && !(isHoveringOverThisItem))
+                                KeyboardInputHandler.instance.currentPressedKeyCollection.splice(indexOfThing, 1)
+                        }
+                        const scaleOfButton = 50
+                        const leftMargin = 30
+                        const positionYOfLeftControl = gameCanvas.height / 1.5
+                        renderMobileButton(context, new Vector2(leftMargin , positionYOfLeftControl), "Left", "KeyA", new Vector2(scaleOfButton, scaleOfButton))
+                        renderMobileButton(context, new Vector2(leftMargin + scaleOfButton + 5, positionYOfLeftControl - scaleOfButton), "Up", "KeyW", new Vector2(scaleOfButton, scaleOfButton))
+                        renderMobileButton(context, new Vector2(leftMargin + scaleOfButton + 5, positionYOfLeftControl + scaleOfButton), "Down", "KeyS", new Vector2(scaleOfButton, scaleOfButton))
+                        renderMobileButton(context, new Vector2(leftMargin + (scaleOfButton * 2) + 10, positionYOfLeftControl), "Right", "KeyD", new Vector2(scaleOfButton, scaleOfButton))
+                        renderMobileButton(context, new Vector2(gameCanvas.width - scaleOfButton * 2, positionYOfLeftControl), "Use", "KeyE", new Vector2(scaleOfButton, scaleOfButton))
                     }
                 }, 1)
             }
@@ -107,7 +152,7 @@ export function GameWindow() {
 
     return (
         <>
-            <canvas className={"bg-black absolute m-auto left-0 right-0 top-0 bottom-0 md:w-150 w-100 border-4 rounded-md border-yellow-300"}
+            <canvas className={"bg-black absolute m-auto left-0 right-0 top-0 bottom-0 border-4 rounded-md border-yellow-300"}
             style={{imageRendering: "pixelated"}}
                     id={"gameCanvas"}
                     width={640} height={480}></canvas>
