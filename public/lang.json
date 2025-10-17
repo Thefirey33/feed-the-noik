@@ -9,5 +9,7 @@
   "meowText": "(Niko just made a meow sound.)",
   "errorOhNo": "Your display doesn't support the game, we're sorry.",
   "keepMeEntertained": "Keep Me Entertained!!!",
-  "clickHereToStart": "click here to start the noik's adventure!"
+  "clickHereToStart": "click here to start the noik's adventure!",
+  "fullscreen": "Fullscreen!",
+  "stopFullscreen": "[F] to exit fullscreen."
 }

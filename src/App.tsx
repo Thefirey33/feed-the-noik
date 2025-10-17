@@ -4,16 +4,21 @@ import { UpToolbar } from "./components/UpToolbar.tsx";
 import { useEffect, useState } from "react";
 import { GameWindow } from "./game/GameWindow.tsx";
 import { DraggableObject } from "./components/funStuff/DraggableObject.tsx";
-import { CoolAudioPlayer } from './components/funStuff/CoolAudioPlayer.tsx';
-import { LanguageSystem, SoundSystem } from './GeneralStuff.ts';
+import { isMobileUser, LanguageSystem, SoundSystem } from './game/renderer/GeneralStuff.ts';
 
 
 function App() {
     const [websiteLoading, setIsWebsiteLoading] = useState(2)
-
-    // seriously.
-    const test: {[key: string]: string} = {}
-    const [languageData, setLanguageData] = useState(test)
+    const WINDOW_MARGIN = 10
+    function getResolutionFromWindow(): {width: number, height: number} {
+        return {
+            width: window.innerWidth - WINDOW_MARGIN,
+            height: window.innerHeight / 2
+        }
+    }
+    const [gameResolution, setGameResolution] = useState(getResolutionFromWindow())
+    const [languageData, setLanguageData] = useState({})
+    const [fullscreenState, setFullscreenState] = useState(false)
 
     useEffect(() => {
         // This is the attacher that tells us when the assetloading is finished.
@@ -35,37 +40,20 @@ function App() {
             // Set all the langauge data.
             LanguageSystem.SetAllLanguageData(data)
         })
-    }, []);
-    if (window.innerWidth < 640 || window.innerHeight < 480)
-    {
-        return (
-            <div className='flex flex-col'>
-                <div className='text-white flex flex-col m-5 p-10 bg-black/30 rounded-xl'>
-                    <img src='/niko_crying.jpg' className='max-w-20 justify-center self-center m-5'/>
-                    <h1>{languageData["errorOhNo"]}</h1>
-                </div>
-                <div className='absolute bottom-0 w-full m-auto items-center flex flex-col origin-center bg-black text-white p-5'>
-                    <h1 className='text-yellow-300 text-xl'>This website is a project of THEFIREY33.</h1>
-                    <p>It is mainly made for fun, all rights of OneShot, belong to FutureCat LLC.</p>
-                </div>
-                <CoolAudioPlayer className="self-center bg-black text-white rounded-md p-4 border-2 cursor-pointer hover:bg-gray-800 focus:bg-gray-200">
-                    {languageData["keepMeEntertained"]}
-                </CoolAudioPlayer>
-            </div>
-        )
-    }
-    else
-    {
+        window.addEventListener("resize", () => {
+            setGameResolution(getResolutionFromWindow())
+        })
+    }, [websiteLoading]);
     console.log("Website Load Phase, Thefirey33 'Load-Safe-Guard-System':", websiteLoading)
     // The game engine and the toolbar.
     return (
             <>
                 
                 {websiteLoading == 0 && <>
-                    <GameWindow/>
-                    <UpToolbar languageData={languageData}/>
+                    <UpToolbar languageData={languageData} getFullscreenState={fullscreenState} setFullscreenState={setFullscreenState}/>
+                    <GameWindow width={gameResolution.width} height={gameResolution.height} isFullscreen={fullscreenState} setFullscreenDispatch={setFullscreenState}/>
                 </>}
-                {(window.innerWidth >= 810) && <>
+                {(window.innerWidth >= 810 && !(isMobileUser)) && <>
                     <DraggableObject imgSource={"noik-spin.gif"} alt={"noik!"}/>
                     <DraggableObject imgSource={"pancake.png"} alt={"noik!"}/>
                 </>}
@@ -76,8 +64,7 @@ function App() {
                     {websiteLoading > 0 && <h1>Loading All Audio...</h1>}
                 </div>}
             </>
-        )
-    }
+    )
 }
 
 

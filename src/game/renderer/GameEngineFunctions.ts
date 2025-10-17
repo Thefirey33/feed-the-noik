@@ -1,6 +1,7 @@
 
 
 
+
 /**
  * The Vector2, Two-Axis Position System.
  */
@@ -75,6 +76,13 @@ export class AnimatedImageAsset {
             this.aniFrame = (this.aniFrame + deltaTime * aniSpeed) % this.imgArray.length;
         else
             this.aniFrame = 0
+    }
+    /**
+     * This function grabs the current image asset of the animated image asset.
+     * @returns Current Image Asset.
+     */
+    public returnCurrentImageAsset(): ImageAsset {
+        return this.imgArray[0]
     }
 }
 
@@ -264,6 +272,95 @@ export class NikoEntity extends Entity {
     }
 }
 /**
+* This function renders the mobile button.
+* @param context The game canvas context renderer.
+* @param position The position to render to.
+* @param text The text to render for the button.
+* @param controlToActive Is the controller active?
+* @param scale The scale of the buttons.
+*/
+export function renderMobileButton(context: CanvasRenderingContext2D, position: Vector2, text: string, controlToActive: string, scale: Vector2 = new Vector2(50, 50), virtualMouseCursor: Vector2[], autoSize = false){
+    let isHoveringOverThisItem = false
+    if (autoSize)
+    {
+        scale.x = GameEngineFunctions.MeasureFont(context, text, 20).width
+    }
+    virtualMouseCursor.forEach((virtualMouseCursorPos) => {
+    if (!isHoveringOverThisItem)
+        isHoveringOverThisItem = (virtualMouseCursorPos.x > position.x && virtualMouseCursorPos.y > position.y && position.x + scale.x > virtualMouseCursorPos.x && position.y + scale.y > virtualMouseCursorPos.y)
+    })
+    const newColorToRender = isHoveringOverThisItem ? 100 : 0
+    // Render the border of the rectangle.
+    GameEngineFunctions.RenderRect(context, position.addition(new Vector2(-3, -3)), scale.addition(new Vector2(6, 6)), "white")
+    // Render the inner rectangle.
+    GameEngineFunctions.RenderRect(context, position, scale, `rgba(${newColorToRender}, ${newColorToRender}, ${newColorToRender}, 1)`)
+    GameEngineFunctions.DrawFont(context, position.addition(new Vector2(0, scale.y * 0.8)), text, "white", 20)
+    const indexOfThing = KeyboardInputHandler.instance.currentPressedKeyCollection.indexOf(controlToActive)
+    if (indexOfThing == -1 && isHoveringOverThisItem)
+        KeyboardInputHandler.instance.currentPressedKeyCollection.push(controlToActive)
+    else if (indexOfThing != -1 && !(isHoveringOverThisItem))
+        KeyboardInputHandler.instance.currentPressedKeyCollection.splice(indexOfThing, 1)
+}
+/**
+ * This function does all the mobile related contexts.
+ * @param isMobileUser If the user is a mobile user, do the actions specified in this environment.
+ * @param virtualMouseCursor The current virtual mouse cursor.
+ * @param gameCanvas The gameCanvas we are rendering to.
+ * @param context The renderer itself.
+ */
+
+export function doMobileFunctions(isMobileUser: boolean, virtualMouseCursor: Vector2[], gameCanvas: HTMLCanvasElement, context: CanvasRenderingContext2D)
+{
+    if (isMobileUser)
+    {
+        const scaleOfButton = 50
+        const leftMargin = 30
+        // This is the top position of all the controls that align themselves together.
+        const positionYControls = gameCanvas.height / 1.5 - (innerHeight < 480 ? scaleOfButton : 0)
+        // Render the left button.
+        renderMobileButton(context, new Vector2(leftMargin , positionYControls), "Left", "KeyA", new Vector2(scaleOfButton, scaleOfButton), virtualMouseCursor)
+        // Render the forward button.
+        renderMobileButton(context, new Vector2(leftMargin + scaleOfButton + 5, positionYControls - scaleOfButton), "Up", "KeyW", new Vector2(scaleOfButton, scaleOfButton), virtualMouseCursor)
+        // Render the down button.
+        renderMobileButton(context, new Vector2(leftMargin + scaleOfButton + 5, positionYControls + scaleOfButton), "Down", "KeyS", new Vector2(scaleOfButton, scaleOfButton), virtualMouseCursor)
+        // Render the right button.
+        renderMobileButton(context, new Vector2(leftMargin + (scaleOfButton * 2) + 10, positionYControls), "Right", "KeyD", new Vector2(scaleOfButton, scaleOfButton), virtualMouseCursor)
+        // Render the USE button.
+        // The USE button will be used for interacting with nigames, events etc.
+        renderMobileButton(context, new Vector2(gameCanvas.width - scaleOfButton * 2, positionYControls), "Use", "KeyE", new Vector2(scaleOfButton, scaleOfButton), virtualMouseCursor)
+    }
+}
+/**
+ * This function does camera-related tasks.
+ * @param gameCanvas The game canvas we are currently rendering to.
+ * @param noikEntity The noikentity that we are currently grabbing and looking towards.
+ * @param deltaTime The deltaTime value of the current session.
+ * @param CAMERA_VELOCITY The camera velocity.
+ * @param CAMERA_POSITION The camera position.
+ */
+export function doCameraPositioning(gameCanvas: HTMLCanvasElement, noikEntity: NikoEntity, deltaTime: number, CAMERA_VELOCITY: number, CAMERA_POSITION: Vector2){
+    // Base level camera positioning system.
+    if (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyQ"))
+    {
+        const horizontalX = KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyA") ? 1 : (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyD") ? -1 : 0)
+        const verticalY = KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyW") ? 1 : (KeyboardInputHandler.instance.checkIfKeyIsPressed("KeyS") ? -1 : 0)
+        CAMERA_POSITION.x += horizontalX * 300 * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)
+        CAMERA_POSITION.y += verticalY * 300 * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime)
+    }
+    else
+    {
+        function returnDeltaTimedCameraPos(cameraPos: number,  cameraRealPos: number){
+            return (cameraPos - cameraRealPos) * GameEngineFunctions.getActualDeltaTimeNumber(deltaTime) * CAMERA_VELOCITY;
+        }
+        // COOL CAMERA SYSTEM.
+        const futureCameraPositionX = -(noikEntity.position.x) + gameCanvas.width / 2
+        const futureCameraPositionY = -(noikEntity.position.y) + gameCanvas.height / 2
+        // Camera Position System
+        CAMERA_POSITION.addition_self(new Vector2(returnDeltaTimedCameraPos(futureCameraPositionX, CAMERA_POSITION.x), returnDeltaTimedCameraPos(futureCameraPositionY, CAMERA_POSITION.y)))
+    }
+}
+export const averageSizeOfTile = 0
+/**
  * Base GameEngineFunctions, filled with rendering functions.
  */
 export class GameEngineFunctions {
@@ -323,7 +420,6 @@ export class GameEngineFunctions {
         canvasContext.fillText(text, position.x, position.y);
         return canvasContext.measureText(text)
     }
-
     /**
      * This function renders an image to the screen.
      * @param canvasContext The canvas context, or screen to render to.
@@ -335,13 +431,22 @@ export class GameEngineFunctions {
         canvasContext.drawImage(image.imgData, position.x, position.y)
     }
 
-    public static getActualDeltaTimeNumber(rawDeltaTime: number): number {
+    public static getActualDeltaTimeNumber(rawDeltaTime: number): numbmier {
         return rawDeltaTime / 1000;
     }
-    public static DrawCircle(canvasContext: CanvasRenderingContext2D, color: string, position: Vector2, radius: Vector2){
+    /**
+     * Draw the circle to the screen.
+     * @param canvasContext The game context to render to.
+     * @param color The color to render at.
+     * @param position The position of the circle we want to render to.
+     * @param radius The radius of the circle, the circle is a full turn.
+     */
+    public static DrawCircle(canvasContext: CanvasRenderingContext2D, color: string, position: Vector2, radius: Vector2, turnAngle: number = Math.PI * 2){
+        // Begin the path for drawing the circle.
         canvasContext.beginPath()
         canvasContext.fillStyle = color
-        canvasContext.ellipse(position.x, position.y, radius.x, radius.y, 0, 0, Math.PI * 2, false)
+        // Draw the circle.
+        canvasContext.ellipse(position.x, position.y, radius.x, radius.y, 0, 0, turnAngle, false)
         canvasContext.fill()
         canvasContext.closePath()
     }

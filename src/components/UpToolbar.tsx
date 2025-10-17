@@ -1,10 +1,10 @@
 import "../App.css"
 import * as React from "react";
-import {SoundSystem} from "../GeneralStuff.ts";
+import {SoundSystem} from "../game/renderer/GeneralStuff.ts";
 import { MessageBox } from "./MessageBox.tsx";
 import {useRef} from "react";
 
-export function UpToolbar(props: {languageData: { [key: string]: string}}) {
+export function UpToolbar(props: {languageData: { [key: string]: string}, getFullscreenState: boolean, setFullscreenState: React.Dispatch<React.SetStateAction<boolean>>}) {
     function ToolbarButton (props: {onClick?: () => void, children: React.JSX.Element | string}) {
         return (
             <>
@@ -55,6 +55,11 @@ export function UpToolbar(props: {languageData: { [key: string]: string}}) {
                         }}>{
                             props.languageData["funnyButton"]
                         }</ToolbarButton>
+                        <ToolbarButton onClick={() => {
+                            props.setFullscreenState(!props.getFullscreenState)
+                            
+                        }}>{props.languageData["fullscreen"]}
+                        </ToolbarButton>
                     </div>
                 </div>
             </div>

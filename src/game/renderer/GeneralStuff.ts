@@ -1,4 +1,4 @@
-import { Vector2 } from "./game/renderer/GameEngineFunctions"
+import { Vector2 } from "./GameEngineFunctions"
 
 class BlobContainer {
     blobItself: Blob
@@ -14,10 +14,8 @@ export class LanguageSystem {
     public static LanguageData : {[key: string]: string} = {}
     public static SetAllLanguageData(languageData: ({[key: string]: string})){
         LanguageSystem.LanguageData = languageData
-        console.log(LanguageSystem.LanguageData)
     }
     public static getLanguageData(keyName: string){
-        console.log(LanguageSystem.LanguageData)
         return LanguageSystem.LanguageData[keyName]
     }
 }
@@ -37,7 +35,6 @@ export const isMobileUser = userAgentRegExTest.test(window.navigator.userAgent)
  * meant for mobile devices.
  */
 export const virtualMouseCursor : Vector2[] = []
-
 
 export class SoundSystem {
     public static Sounds : Map<string, BlobContainer> = new Map<string, BlobContainer>();

@@ -72,7 +72,6 @@ export function registerTilemap() {
                 }
             }
         })
-    console.log(tilemapGrid)
     return new Tilemap(new Vector2(ROOM_SIZE.x, ROOM_SIZE.y), tilemapGrid)
 }
 
@@ -80,11 +79,7 @@ export function registerTilemap() {
  * The position of the camera in-game.
  */
 export const CAMERA_POSITION: Vector2 = new Vector2(0, 0)
-/**
- * The velocity/speed of the camera in-game.
- */
 export const CAMERA_VELOCITY = 5
-
 export class Tilemap {
     tilemapSize: Vector2 = new Vector2(0, 0)
     allTiles: TilemapPiece[]
@@ -102,6 +97,8 @@ export class Tilemap {
         const tilePiecePosition: Vector2 = new Vector2(0, 32)
         for (let i = 0; i < this.allTiles.length; i++) {
             const currentTile = this.allTiles[i]
+            if (currentTile.textureData == undefined)
+                return;
             const tileMapTextureSize = currentTile.getTextureSize()
             if (i % this.tilemapSize.x === 0)
             {

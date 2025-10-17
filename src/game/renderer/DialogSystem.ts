@@ -1,5 +1,5 @@
-import { SoundSystem } from "../../GeneralStuff"
-import { GameEngineFunctions, ImageAsset } from "./GameEngineFunctions"
+import { SoundSystem } from "./GeneralStuff"
+import { GameEngineFunctions, ImageAsset, Vector2 } from "./GameEngineFunctions"
 
 
 /**
