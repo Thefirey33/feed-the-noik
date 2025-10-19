@@ -431,7 +431,7 @@ export class GameEngineFunctions {
         canvasContext.drawImage(image.imgData, position.x, position.y)
     }
 
-    public static getActualDeltaTimeNumber(rawDeltaTime: number): numbmier {
+    public static getActualDeltaTimeNumber(rawDeltaTime: number): number {
         return rawDeltaTime / 1000;
     }
     /**
