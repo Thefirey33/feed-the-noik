@@ -1,16 +1,16 @@
 [
 {
   "directory": "/home/thefirey33/Masaüstü/Projects/feed-the-noik",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-std=c99", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-isystem", "/usr/include/SDL2", "-isystem", "/home/thefirey33/.xmake/packages/n/nlohmann_json/v3.12.0/b36e201b1206419d94ef523b409412cf/include", "-o", "build/.objs/feed-the-noik/linux/x86_64/debug/src/main.c.o", "src/main.c"],
-  "file": "src/main.c"
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++20", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-I", "/usr/include/SDL2", "-I", "/usr/include/libpng16", "-I", "/usr/include/rav1e", "-I", "/usr/include/svt-av1", "-I", "/usr/include/webp", "-DNDEBUG", "-o", "build/.objs/feed-the-noik/linux/x86_64/release/src/main.cpp.o", "src/main.cpp"],
+  "file": "src/main.cpp"
 },
 {
   "directory": "/home/thefirey33/Masaüstü/Projects/feed-the-noik",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-std=c99", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-isystem", "/usr/include/SDL2", "-isystem", "/home/thefirey33/.xmake/packages/n/nlohmann_json/v3.12.0/b36e201b1206419d94ef523b409412cf/include", "-o", "build/.objs/feed-the-noik/linux/x86_64/debug/src/game_engine/tentrillion_engine.c.o", "src/game_engine/tentrillion_engine.c"],
-  "file": "src/game_engine/tentrillion_engine.c"
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++20", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-I", "/usr/include/SDL2", "-I", "/usr/include/libpng16", "-I", "/usr/include/rav1e", "-I", "/usr/include/svt-av1", "-I", "/usr/include/webp", "-DNDEBUG", "-o", "build/.objs/feed-the-noik/linux/x86_64/release/src/game_engine/tentrillion_engine.cpp.o", "src/game_engine/tentrillion_engine.cpp"],
+  "file": "src/game_engine/tentrillion_engine.cpp"
 },
 {
   "directory": "/home/thefirey33/Masaüstü/Projects/feed-the-noik",
-  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-std=c99", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-isystem", "/usr/include/SDL2", "-isystem", "/home/thefirey33/.xmake/packages/n/nlohmann_json/v3.12.0/b36e201b1206419d94ef523b409412cf/include", "-o", "build/.objs/feed-the-noik/linux/x86_64/debug/src/game_engine/tentrillion_texture.c.o", "src/game_engine/tentrillion_texture.c"],
-  "file": "src/game_engine/tentrillion_texture.c"
+  "arguments": ["/usr/bin/g++", "-c", "-m64", "-fvisibility=hidden", "-fvisibility-inlines-hidden", "-O3", "-std=c++20", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-I", "/usr/include/SDL2", "-I", "/usr/include/libpng16", "-I", "/usr/include/rav1e", "-I", "/usr/include/svt-av1", "-I", "/usr/include/webp", "-DNDEBUG", "-o", "build/.objs/feed-the-noik/linux/x86_64/release/src/game_engine/tentrillion_textures.cpp.o", "src/game_engine/tentrillion_textures.cpp"],
+  "file": "src/game_engine/tentrillion_textures.cpp"
 }]

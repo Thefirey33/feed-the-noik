@@ -10,6 +10,6 @@ This engine will be optimized to render rendering sequences very quickly with SD
 
 - xmake
 - git
-- c99 (C 99 ISO Standart)
+- cxx20 (C++ 20 ISO Standart)
 
 To setup this project, you need [XMake](https://xmake.io/). The build system for this project.
