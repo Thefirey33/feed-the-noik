@@ -1,0 +1,16 @@
+[
+{
+  "directory": "/home/thefirey33/Masaüstü/Projects/feed-the-noik",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-std=c23", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-isystem", "/usr/include/SDL2", "-o", "build/.objs/feed-the-noik/linux/x86_64/debug/src/main.c.o", "src/main.c"],
+  "file": "src/main.c"
+},
+{
+  "directory": "/home/thefirey33/Masaüstü/Projects/feed-the-noik",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-std=c23", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-isystem", "/usr/include/SDL2", "-o", "build/.objs/feed-the-noik/linux/x86_64/debug/src/game_engine/tentrillion_engine.c.o", "src/game_engine/tentrillion_engine.c"],
+  "file": "src/game_engine/tentrillion_engine.c"
+},
+{
+  "directory": "/home/thefirey33/Masaüstü/Projects/feed-the-noik",
+  "arguments": ["/usr/bin/gcc", "-c", "-m64", "-g", "-O0", "-std=c23", "-Iinclude", "-Iinclude/game_engine", "-D_GNU_SOURCE=1", "-D_REENTRANT", "-isystem", "/usr/include/SDL2", "-o", "build/.objs/feed-the-noik/linux/x86_64/debug/src/game_engine/tentrillion_texture.c.o", "src/game_engine/tentrillion_texture.c"],
+  "file": "src/game_engine/tentrillion_texture.c"
+}]
