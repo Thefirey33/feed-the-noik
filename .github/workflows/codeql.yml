@@ -87,9 +87,8 @@ jobs:
       if: matrix.build-mode == 'manual'
       shell: bash
       run: |
-        sudo add-apt-repository ppa:xmake-io/xmake
-        sudo apt-get update
-        sudo apt-get -y install xmake
+        curl -fsSL https://xmake.io/shget.text | bash
+        xrepo install libsdl2_image
         xmake build --all -y
       
     - name: Perform CodeQL Analysis
