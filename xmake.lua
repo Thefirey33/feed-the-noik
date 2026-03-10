@@ -6,7 +6,7 @@ target("feed-the-noik")
     set_languages("cxx20")
     add_includedirs("include/", "include/game_engine")
     add_files("src/*.cpp", "src/game_engine/*.cpp")
-    add_packages("libsdl2", "sdl2_image")
+    add_packages("libsdl2", "libsdl2_image")
 
     after_build(function () 
         os.cp("$(curdir)/assets", "$(builddir)/$(plat)/$(arch)/$(mode)/", { async = true })
