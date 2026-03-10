@@ -88,7 +88,7 @@ jobs:
       shell: bash
       run: |
         curl -fsSL https://xmake.io/shget.text | bash
-        xrepo install libsdl2_image
+        xrepo install -y libsdl2_image
         xmake build --all -y
       
     - name: Perform CodeQL Analysis
