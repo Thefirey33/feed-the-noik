@@ -91,14 +91,8 @@ jobs:
         run: |
           sudo add-apt-repository ppa:xmake-io/xmake
           sudo apt-get update
-          sudo apt-get install -y \
-            libsdl3-dev \
-            libsdl2-dev \
-            libsdl2-image-dev \
-            libsdl2-mixer-dev \
-            libsdl2-ttf-dev \
-            libsdl2-net-dev \
-            xmake
+          sudo apt-get install -y libsdl3 libsdl2-dev libsdl2-image-dev libsdl2-mixer-dev libsdl2-net-dev libsdl2-ttf-dev
+          sudo apt-get install -y xmake
           xmake build --all -y
 
       - name: Perform CodeQL Analysis
