@@ -1,5 +1,5 @@
 add_rules("mode.debug", "mode.release")
-add_requires("libsdl2", "sdl2_image")
+add_requires("libsdl2", "libsdl2_image")
 
 target("feed-the-noik")
     set_kind("binary")
